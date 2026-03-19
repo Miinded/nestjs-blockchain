@@ -88,14 +88,27 @@ describe('SignatureService', () => {
 
   describe('error handling', () => {
     let serviceWithoutKey: SignatureService;
+    let web3Instance: Web3;
 
     beforeAll(() => {
-      const web3 = new Web3(new OfflineProvider());
-      serviceWithoutKey = new SignatureService(web3);
+      web3Instance = new Web3(new OfflineProvider());
+      serviceWithoutKey = new SignatureService(web3Instance);
     });
 
     it('should throw when createSignature is called without privateKey', () => {
       expect(() => serviceWithoutKey.createSignature('test')).toThrow('Private key is not defined');
+    });
+
+    it('should throw when sha3 returns null on createSignature', () => {
+      const mockWeb3 = { utils: { sha3: jest.fn().mockReturnValue(null) }, eth: { accounts: {} } } as any;
+      const svc = new SignatureService(mockWeb3, '0xbe6383dad004f233317e46ddb46ad31b16064d14447a95cc1d8c8d4bc61c3728');
+      expect(() => svc.createSignature('test')).toThrow('Invalid hex message.');
+    });
+
+    it('should throw when sha3 returns null on recoverSignature', async () => {
+      const mockWeb3 = { utils: { sha3: jest.fn().mockReturnValue(null) }, eth: { accounts: {} } } as any;
+      const svc = new SignatureService(mockWeb3, '0xbe6383dad004f233317e46ddb46ad31b16064d14447a95cc1d8c8d4bc61c3728');
+      await expect(svc.recoverSignature('0xsig', 'test')).rejects.toThrow('Invalid message hash.');
     });
   });
 });

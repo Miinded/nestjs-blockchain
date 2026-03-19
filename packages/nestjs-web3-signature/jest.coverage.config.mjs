@@ -5,7 +5,7 @@ export default {
   collectCoverageFrom: [
     ...(coverageJestConfig.collectCoverageFrom ?? []),
     '!src/service/base-signature.service.ts',
+    '!src/service/base-btc-signature.service.ts',
     '!src/service/offline-provider.service.ts',
-    '!src/service/signature.manager.ts',
   ],
 };
