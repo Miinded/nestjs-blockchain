@@ -66,7 +66,8 @@
   },
   "dependencies": {
     "@miinded/nestjs-blockchain-core": "workspace:*",
-    "@miinded/nestjs-web3-signature": "workspace:*"
+    "@miinded/nestjs-web3-signature": "workspace:*",
+    "@metamask/eth-sig-util": "catalog:"
   },
   "peerDependencies": {
     "@nestjs/common": "^10.3.0 || ^11.0.0",
@@ -92,6 +93,7 @@
     "@types/node": "catalog:",
     "@types/passport": "catalog:",
     "@types/passport-jwt": "catalog:",
+    "@types/passport-strategy": "catalog:",
     "@types/supertest": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",

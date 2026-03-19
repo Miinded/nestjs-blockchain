@@ -67,7 +67,9 @@
   "dependencies": {
     "@miinded/nestjs-blockchain-core": "workspace:*",
     "ethers": "^6.16.0",
-    "web3": "^4.16.0"
+    "web3": "^4.16.0",
+    "web3-eth-contract": "^4.7.2",
+    "web3-types": "catalog:"
   },
   "peerDependencies": {
     "@nestjs/axios": "^4.0.0",

@@ -15,6 +15,9 @@ catalogs:
     '@commitlint/config-conventional':
       specifier: ^20.4.1
       version: 20.4.1
+    '@metamask/eth-sig-util':
+      specifier: ^8.2.0
+      version: 8.2.0
     '@nestjs/axios':
       specifier: ^4.0.1
       version: 4.0.1
@@ -57,6 +60,9 @@ catalogs:
     '@types/passport-jwt':
       specifier: ^4.0.0
       version: 4.0.1
+    '@types/passport-strategy':
+      specifier: ^0.2.38
+      version: 0.2.38
     '@types/supertest':
       specifier: ^6.0.3
       version: 6.0.3
@@ -111,6 +117,9 @@ catalogs:
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
+    web3-types:
+      specifier: ^1.10.0
+      version: 1.10.0
 
 importers:
   .:
@@ -154,6 +163,9 @@ importers:
 
   packages/nestjs-auth-blockchain:
     dependencies:
+      '@metamask/eth-sig-util':
+        specifier: 'catalog:'
+        version: 8.2.0
       '@miinded/nestjs-blockchain-core':
         specifier: workspace:*
         version: link:../nestjs-blockchain-core
@@ -200,6 +212,9 @@ importers:
       '@types/passport-jwt':
         specifier: 'catalog:'
         version: 4.0.1
+      '@types/passport-strategy':
+        specifier: 'catalog:'
+        version: 0.2.38
       '@types/supertest':
         specifier: 'catalog:'
         version: 6.0.3
@@ -299,6 +314,12 @@ importers:
       web3:
         specifier: ^4.16.0
         version: 4.16.0(typescript@5.9.3)(zod@3.25.76)
+      web3-eth-contract:
+        specifier: ^4.7.2
+        version: 4.7.2(typescript@5.9.3)(zod@3.25.76)
+      web3-types:
+        specifier: 'catalog:'
+        version: 1.10.0
     devDependencies:
       '@nestjs/axios':
         specifier: 'catalog:'
@@ -378,6 +399,9 @@ importers:
       web3:
         specifier: ^4.16.0
         version: 4.16.0(typescript@5.9.3)(zod@3.25.76)
+      web3-types:
+        specifier: 'catalog:'
+        version: 1.10.0
     devDependencies:
       '@nestjs/axios':
         specifier: 'catalog:'
