@@ -33,7 +33,9 @@ for (const dir of packageDirs) {
       }
 
       if (String(version).startsWith('workspace:')) {
-        console.error(`[deps:check] ${pkg.name}: avoid workspace protocol for published internal dependency ${name} (${section})`);
+        console.error(
+          `[deps:check] ${pkg.name}: avoid workspace protocol for published internal dependency ${name} (${section})`,
+        );
         hasError = true;
       }
     }
@@ -42,7 +44,9 @@ for (const dir of packageDirs) {
   const runtimeDeps = pkg.dependencies ?? {};
   for (const name of Object.keys(runtimeDeps)) {
     if (name.startsWith('@nestjs/') || name === 'rxjs') {
-      console.error(`[deps:check] ${pkg.name}: move ${name} from dependencies to peerDependencies for publishable libs`);
+      console.error(
+        `[deps:check] ${pkg.name}: move ${name} from dependencies to peerDependencies for publishable libs`,
+      );
       hasError = true;
     }
   }
