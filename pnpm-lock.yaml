@@ -15,6 +15,9 @@ catalogs:
     '@commitlint/config-conventional':
       specifier: ^20.4.1
       version: 20.4.1
+    '@nestjs/axios':
+      specifier: ^4.0.1
+      version: 4.0.1
     '@nestjs/common':
       specifier: ^11.1.14
       version: 11.1.14
@@ -290,9 +293,6 @@ importers:
       '@miinded/nestjs-blockchain-core':
         specifier: workspace:*
         version: link:../nestjs-blockchain-core
-      '@nestjs/axios':
-        specifier: ^4.0.1
-        version: 4.0.1(@nestjs/common@11.1.14(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.13.5)(rxjs@7.8.2)
       ethers:
         specifier: ^6.16.0
         version: 6.16.0
@@ -300,6 +300,9 @@ importers:
         specifier: ^4.16.0
         version: 4.16.0(typescript@5.9.3)(zod@3.25.76)
     devDependencies:
+      '@nestjs/axios':
+        specifier: 'catalog:'
+        version: 4.0.1(@nestjs/common@11.1.14(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.13.5)(rxjs@7.8.2)
       '@nestjs/common':
         specifier: 'catalog:'
         version: 11.1.14(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -369,9 +372,6 @@ importers:
       '@miinded/nestjs-blockchain-core':
         specifier: workspace:*
         version: link:../nestjs-blockchain-core
-      '@nestjs/axios':
-        specifier: ^4.0.1
-        version: 4.0.1(@nestjs/common@11.1.14(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.13.5)(rxjs@7.8.2)
       axios:
         specifier: ^1.13.5
         version: 1.13.5
@@ -379,6 +379,9 @@ importers:
         specifier: ^4.16.0
         version: 4.16.0(typescript@5.9.3)(zod@3.25.76)
     devDependencies:
+      '@nestjs/axios':
+        specifier: 'catalog:'
+        version: 4.0.1(@nestjs/common@11.1.14(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.13.5)(rxjs@7.8.2)
       '@nestjs/common':
         specifier: 'catalog:'
         version: 11.1.14(reflect-metadata@0.2.2)(rxjs@7.8.2)

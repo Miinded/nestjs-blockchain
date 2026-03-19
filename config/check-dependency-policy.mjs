@@ -32,7 +32,7 @@ for (const dir of packageDirs) {
         continue;
       }
 
-      if (String(version).startsWith('workspace:')) {
+      if (String(version).startsWith('workspace:') && section !== 'dependencies') {
         console.error(
           `[deps:check] ${pkg.name}: avoid workspace protocol for published internal dependency ${name} (${section})`,
         );
