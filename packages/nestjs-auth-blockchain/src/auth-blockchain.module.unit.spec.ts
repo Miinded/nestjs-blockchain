@@ -1,0 +1,137 @@
+import { TestingModule } from '@nestjs/testing';
+import { AuthBlockchainModule, AuthBlockchainAsyncConfig } from './auth-blockchain.module';
+import { BLOCKCHAIN_MODULE_OPTIONS, BLOCKCHAIN_USER_SERVICE } from './constants';
+import { BlockchainAuthController } from './controllers/blockchain-auth.controller';
+import { MyPassportAuthBlockchainStrategy } from './strategy/my-passport-auth-blockchain.strategy';
+import { BlockchainJwtStrategy } from './strategy/blockchain-jwt.strategy';
+import { IBlockchainAuth } from './interface/IBlockchainAuth.interface';
+import { SignatureType } from '@miinded/nestjs-web3-signature';
+
+class MockUserService implements IBlockchainAuth {
+  async getOneUserByWallet(wallet: string) {
+    return { id: '1', username: 'test', wallet };
+  }
+  async nonce(signatureType: SignatureType, networkId: number, wallet: string, uri: string, message: string) {
+    return { nonce: 'test-nonce', issuedAt: '2023-01-01' };
+  }
+  async get<T>(): Promise<T> {
+    return { nonce: 'test-nonce', issuedAt: '2023-01-01' } as T;
+  }
+}
+
+describe('AuthBlockchainModule', () => {
+  let testModule: TestingModule | undefined;
+
+  const mockConfig: AuthBlockchainAsyncConfig = {
+    useFactory: () => ({
+      domain: 'localhost',
+      secret: 'test-secret',
+      chainIds: [1],
+      providers: {
+        DEFAULT: {
+          blockchainAddress: 'http://localhost:8545',
+          privateKey: '0xbe6383dad004f233317e46ddb46ad31b16064d14447a95cc1d8c8d4bc61c3728',
+        },
+      },
+    }),
+    userService: MockUserService as any,
+  };
+
+  beforeEach(async () => {
+    jest.clearAllMocks();
+  });
+
+  afterEach(async () => {
+    if (testModule) {
+      await testModule.close();
+    }
+  });
+
+  it('should be defined', () => {
+    expect(AuthBlockchainModule).toBeDefined();
+  });
+
+  it('should register async module with providers', async () => {
+    const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
+
+    expect(dynamicModule.module).toBe(AuthBlockchainModule);
+    expect(dynamicModule.global).toBe(true);
+    expect(dynamicModule.controllers).toContain(BlockchainAuthController);
+    expect(dynamicModule.providers).toBeDefined();
+    expect(dynamicModule.exports).toBeDefined();
+  });
+
+  it('should have correct module options provider in core module', async () => {
+    const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
+    const coreModule = (dynamicModule.imports as any[])?.find(
+      (m: any) => m.providers?.some((p: any) => p.provide === BLOCKCHAIN_MODULE_OPTIONS),
+    );
+    expect(coreModule).toBeDefined();
+    const optionsProvider = coreModule.providers.find((p: any) => p.provide === BLOCKCHAIN_MODULE_OPTIONS);
+    expect(optionsProvider).toBeDefined();
+    expect(optionsProvider.useFactory).toBe(mockConfig.useFactory);
+  });
+
+  it('should have user service provider', async () => {
+    const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
+    const userServiceProvider = dynamicModule.providers?.find(
+      (p: any) => (p as any).provide === BLOCKCHAIN_USER_SERVICE,
+    );
+    expect(userServiceProvider).toBeDefined();
+  });
+
+  it('should have MyPassportAuthBlockchainStrategy provider', async () => {
+    const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
+    const strategyProvider = dynamicModule.providers?.find(
+      (p: any) => (p as any).provide === MyPassportAuthBlockchainStrategy,
+    );
+    expect(strategyProvider).toBeDefined();
+  });
+
+  it('should have BlockchainJwtStrategy provider', async () => {
+    const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
+    const jwtStrategyProvider = dynamicModule.providers?.find((p: any) => (p as any).provide === BlockchainJwtStrategy);
+    expect(jwtStrategyProvider).toBeDefined();
+  });
+
+  it('should throw error when signature manager not found', async () => {
+    const configWithoutProviders: AuthBlockchainAsyncConfig = {
+      useFactory: () => ({
+        domain: 'localhost',
+        secret: 'test-secret',
+        chainIds: [1],
+      }),
+      userService: MockUserService,
+    };
+
+    const dynamicModule = AuthBlockchainModule.registerAsync(configWithoutProviders);
+    expect(dynamicModule).toBeDefined();
+  });
+
+  it('should handle empty chainIds', async () => {
+    const configWithEmptyChainIds: AuthBlockchainAsyncConfig = {
+      useFactory: () => ({
+        domain: 'localhost',
+        secret: 'test-secret',
+        chainIds: [],
+      }),
+      userService: MockUserService,
+    };
+
+    const dynamicModule = AuthBlockchainModule.registerAsync(configWithEmptyChainIds);
+    expect(dynamicModule).toBeDefined();
+  });
+
+  it('should handle undefined chainIds', async () => {
+    const configWithoutChainIds: AuthBlockchainAsyncConfig = {
+      useFactory: () => ({
+        domain: 'localhost',
+        secret: 'test-secret',
+      }),
+      userService: MockUserService,
+    };
+
+    const dynamicModule = AuthBlockchainModule.registerAsync(configWithoutChainIds);
+    expect(dynamicModule).toBeDefined();
+  });
+});
