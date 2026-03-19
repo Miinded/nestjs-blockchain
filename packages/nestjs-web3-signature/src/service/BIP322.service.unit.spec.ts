@@ -1,6 +1,7 @@
-// WARNING: This is a test-only BTC private key (WIF). DO NOT use in production or hold any funds on it.
-// Source: https://privatekeys.pw/keys/bitcoin/2172400457416669896949144391320179357116712958923796206082058928611917129998
-const btcPrivateKey = 'KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73NUBByJr';
+// WARNING: This is a test-only BTC private key (WIF uncompressed). DO NOT use in production or hold any funds on it.
+// Source: https://privatekeys.pw/key/d821143048616020a807f5531579b4e14e903036f405dfd1aaac403b2863774a
+// Note: bip322-js@2.0.0 uses wif@2.0.6 which does not support uncompressed WIF keys — bip322-js is mocked.
+const btcPrivateKey = '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzZjAvFAUpKgAmdoT1yd';
 const btcAddress = 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4';
 const fakeSignature = 'AkgwRQIhAMd7test+fakeSig==';
 

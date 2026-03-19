@@ -97,6 +97,72 @@ describe('PassportAuthBlockchainStrategy', () => {
     expect(strategy.nonceCheckerService).toBeDefined();
   });
 
+  describe('authenticate', () => {
+    it('should call success when validateUser resolves', (done) => {
+      const request = {
+        headers: {
+          networkid: '1',
+          wallet: VALID_WALLET,
+          signature: '0xsignature',
+          nonce: 'test-nonce',
+        },
+        user: undefined as unknown,
+      };
+
+      (strategy as any).success = (user: unknown) => {
+        expect(user).toBeDefined();
+        done();
+      };
+      (strategy as any).fail = () => done.fail('should not fail');
+
+      strategy.authenticate(request);
+    });
+
+    it('should call fail with 400 when TypeError is thrown', (done) => {
+      const request = {
+        headers: {},
+      };
+
+      (strategy as any).success = () => done.fail('should not succeed');
+      (strategy as any).fail = (_err: unknown, status: number) => {
+        expect(status).toBe(400);
+        done();
+      };
+
+      strategy.authenticate(request);
+    });
+
+    it('should call fail with response.statusCode when error has response.statusCode', (done) => {
+      const statusError = { response: { statusCode: 403, message: 'Forbidden' } };
+      jest.spyOn(strategy, 'validateUser').mockRejectedValueOnce(statusError);
+
+      const request = { headers: {} };
+
+      (strategy as any).success = () => done.fail('should not succeed');
+      (strategy as any).fail = (_err: unknown, status: number) => {
+        expect(status).toBe(403);
+        done();
+      };
+
+      strategy.authenticate(request);
+    });
+
+    it('should call fail with 400 for generic non-typed error', (done) => {
+      const genericError = new Error('generic failure');
+      jest.spyOn(strategy, 'validateUser').mockRejectedValueOnce(genericError);
+
+      const request = { headers: {} };
+
+      (strategy as any).success = () => done.fail('should not succeed');
+      (strategy as any).fail = (_err: unknown, status: number) => {
+        expect(status).toBe(400);
+        done();
+      };
+
+      strategy.authenticate(request);
+    });
+  });
+
   describe('validateUser', () => {
     it('should throw TypeError when networkId is missing', async () => {
       const request = {

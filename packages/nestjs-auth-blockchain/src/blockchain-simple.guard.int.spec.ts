@@ -45,12 +45,20 @@ class MyBlockchainUserService implements IBlockchainAuth {
     };
   }
 
-  async nonce(signatureType: SignatureType, networkId: number, wallet: string, uri: string, message: any) {
+  async nonce(
+    signatureType: SignatureType,
+    networkId: number,
+    wallet: string,
+    domain: string,
+    uri: string,
+    message: any,
+  ) {
     const nonce = crypto.randomBytes(16).toString('hex');
     const issuedAt = new Date().toISOString();
     const result = {
       nonce,
       issuedAt,
+      domain,
       message,
       signatureType,
       uri,
@@ -112,17 +120,18 @@ describe('BlockchainMiddleware - Simple', () => {
     const wallet = '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0';
     const uri = 'http://localhost';
 
-    const result1 = await request(server).post('/signature/nonce').send({
+    const result1 = await request(server).post('/auth/signature/nonce').send({
       wallet,
       networkId: 1,
       signatureType: SignatureType.SIMPLE,
+      domain: 'localhost',
       uri,
     });
     // const { nonce, issuedAt } = result1.body.payload;
     const { nonce } = result1.body.payload;
     const message = {
       domain: 'localhost',
-      chainId: 1,
+      chainId: '1',
       message: 'Sign in with Ethereum to the app.',
       wallet,
       nonce,
@@ -131,7 +140,7 @@ describe('BlockchainMiddleware - Simple', () => {
 
     const signature = createSignatureInTest(message);
     const result2 = await request(server)
-      .post('/signature/login')
+      .post('/auth/signature/login')
       .set('Content-Type', 'application/json')
       .set('wallet', wallet)
       .set('networkId', '1')

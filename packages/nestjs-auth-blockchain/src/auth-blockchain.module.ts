@@ -29,7 +29,9 @@ export type AuthBlockchainConfig = {
 export type AuthBlockchainAsyncConfig = {
   isGlobal?: boolean;
   name?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   useFactory: (...args: any[]) => Promise<AuthBlockchainConfig> | AuthBlockchainConfig;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   inject?: any[];
   userService: Type<IBlockchainAuth>;
 } & Pick<ModuleMetadata, 'imports'>;

@@ -11,7 +11,7 @@ class MockUserService implements IBlockchainAuth {
   async getOneUserByWallet(wallet: string) {
     return { id: '1', username: 'test', wallet };
   }
-  async nonce(signatureType: SignatureType, networkId: number, wallet: string, uri: string, message: string) {
+  async nonce(_signatureType: SignatureType, _networkId: number, _wallet: string, _uri: string, _message: string) {
     return { nonce: 'test-nonce', issuedAt: '2023-01-01' };
   }
   async get<T>(): Promise<T> {
@@ -34,7 +34,7 @@ describe('AuthBlockchainModule', () => {
         },
       },
     }),
-    userService: MockUserService as any,
+    userService: MockUserService,
   };
 
   beforeEach(async () => {
@@ -63,34 +63,37 @@ describe('AuthBlockchainModule', () => {
 
   it('should have correct module options provider in core module', async () => {
     const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
-    const coreModule = (dynamicModule.imports as any[])?.find(
-      (m: any) => m.providers?.some((p: any) => p.provide === BLOCKCHAIN_MODULE_OPTIONS),
+    type Provider = { provide: unknown; useFactory?: unknown };
+    type DynModule = { providers?: Provider[] };
+    const coreModule = (dynamicModule.imports as DynModule[])?.find(
+      (m) => m.providers?.some((p) => p.provide === BLOCKCHAIN_MODULE_OPTIONS),
     );
     expect(coreModule).toBeDefined();
-    const optionsProvider = coreModule.providers.find((p: any) => p.provide === BLOCKCHAIN_MODULE_OPTIONS);
+    const optionsProvider = coreModule!.providers?.find((p) => p.provide === BLOCKCHAIN_MODULE_OPTIONS);
     expect(optionsProvider).toBeDefined();
-    expect(optionsProvider.useFactory).toBe(mockConfig.useFactory);
+    expect(optionsProvider!.useFactory).toBe(mockConfig.useFactory);
   });
 
   it('should have user service provider', async () => {
     const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
-    const userServiceProvider = dynamicModule.providers?.find(
-      (p: any) => (p as any).provide === BLOCKCHAIN_USER_SERVICE,
-    );
+    type P = { provide: unknown };
+    const userServiceProvider = dynamicModule.providers?.find((p) => (p as P).provide === BLOCKCHAIN_USER_SERVICE);
     expect(userServiceProvider).toBeDefined();
   });
 
   it('should have MyPassportAuthBlockchainStrategy provider', async () => {
     const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
+    type P = { provide: unknown };
     const strategyProvider = dynamicModule.providers?.find(
-      (p: any) => (p as any).provide === MyPassportAuthBlockchainStrategy,
+      (p) => (p as P).provide === MyPassportAuthBlockchainStrategy,
     );
     expect(strategyProvider).toBeDefined();
   });
 
   it('should have BlockchainJwtStrategy provider', async () => {
     const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
-    const jwtStrategyProvider = dynamicModule.providers?.find((p: any) => (p as any).provide === BlockchainJwtStrategy);
+    type P = { provide: unknown };
+    const jwtStrategyProvider = dynamicModule.providers?.find((p) => (p as P).provide === BlockchainJwtStrategy);
     expect(jwtStrategyProvider).toBeDefined();
   });
 
