@@ -1,5 +1,5 @@
 import { TestingModule } from '@nestjs/testing';
-import { AuthBlockchainModule, AuthBlockchainAsyncConfig } from './auth-blockchain.module';
+import { AuthBlockchainModule, AuthBlockchainAsyncConfig, AuthBlockchainSyncConfig } from './auth-blockchain.module';
 import { BLOCKCHAIN_MODULE_OPTIONS, BLOCKCHAIN_USER_SERVICE } from './constants';
 import { BlockchainAuthController } from './controllers/blockchain-auth.controller';
 import { MyPassportAuthBlockchainStrategy } from './strategy/my-passport-auth-blockchain.strategy';
@@ -54,6 +54,28 @@ describe('AuthBlockchainModule', () => {
 
   it('should be defined', () => {
     expect(AuthBlockchainModule).toBeDefined();
+  });
+
+  it('should register sync module with providers', async () => {
+    const syncConfig: AuthBlockchainSyncConfig = {
+      domains: ['localhost'],
+      token: {
+        secret: 'test-secret',
+      },
+      refreshToken: {
+        secret: 'test-refresh-secret',
+      },
+      chainIds: [1],
+      userService: MockUserService,
+    };
+
+    const dynamicModule = AuthBlockchainModule.register(syncConfig);
+
+    expect(dynamicModule.module).toBe(AuthBlockchainModule);
+    expect(dynamicModule.global).toBe(true);
+    expect(dynamicModule.controllers).toContain(BlockchainAuthController);
+    expect(dynamicModule.providers).toBeDefined();
+    expect(dynamicModule.exports).toBeDefined();
   });
 
   it('should register async module with providers', async () => {

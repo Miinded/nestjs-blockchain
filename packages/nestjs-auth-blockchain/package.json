@@ -1,6 +1,6 @@
 {
   "name": "@miinded/nestjs-auth-blockchain",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Production-ready NestJS module for blockchain-based authentication. Supports Web3 signature verification with JWT tokens.",
   "license": "MIT",
   "author": "Miinded",
