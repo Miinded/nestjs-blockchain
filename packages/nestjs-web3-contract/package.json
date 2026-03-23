@@ -1,6 +1,6 @@
 {
   "name": "@miinded/nestjs-web3-contract",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Production-ready NestJS module for Web3 smart contract interactions. Supports ERC20, ERC721, ERC1155 standards with full TypeScript support.",
   "license": "MIT",
   "author": "Miinded",

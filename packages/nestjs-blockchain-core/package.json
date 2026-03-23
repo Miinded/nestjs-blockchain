@@ -1,6 +1,6 @@
 {
   "name": "@miinded/nestjs-blockchain-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shared types, interfaces, and utilities for @miinded/nestjs-blockchain packages.",
   "license": "MIT",
   "author": "Miinded",
