@@ -6,13 +6,13 @@
   "author": "Miinded",
   "repository": {
     "type": "git",
-    "url": "https://github.com/miinded/nestjs-blockchain.git",
+    "url": "https://github.com/Miinded/nestjs-blockchain.git",
     "directory": "packages/nestjs-blockchain-core"
   },
   "bugs": {
-    "url": "https://github.com/miinded/nestjs-blockchain/issues"
+    "url": "https://github.com/Miinded/nestjs-blockchain/issues"
   },
-  "homepage": "https://github.com/miinded/nestjs-blockchain/tree/main/packages/nestjs-blockchain-core",
+  "homepage": "https://github.com/Miinded/nestjs-blockchain/tree/main/packages/nestjs-blockchain-core",
   "keywords": [
     "nestjs",
     "blockchain",
