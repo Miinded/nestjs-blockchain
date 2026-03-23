@@ -15,9 +15,6 @@ catalogs:
     '@commitlint/config-conventional':
       specifier: ^20.4.1
       version: 20.4.1
-    '@metamask/eth-sig-util':
-      specifier: ^8.2.0
-      version: 8.2.0
     '@nestjs/axios':
       specifier: ^4.0.1
       version: 4.0.1
@@ -117,9 +114,6 @@ catalogs:
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
-    web3-types:
-      specifier: ^1.10.0
-      version: 1.10.0
 
 importers:
   .:
@@ -164,13 +158,13 @@ importers:
   packages/nestjs-auth-blockchain:
     dependencies:
       '@metamask/eth-sig-util':
-        specifier: 'catalog:'
+        specifier: ^8.2.0
         version: 8.2.0
       '@miinded/nestjs-blockchain-core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nestjs-blockchain-core
       '@miinded/nestjs-web3-signature':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nestjs-web3-signature
     devDependencies:
       '@nestjs/common':
@@ -306,7 +300,7 @@ importers:
   packages/nestjs-web3-contract:
     dependencies:
       '@miinded/nestjs-blockchain-core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nestjs-blockchain-core
       ethers:
         specifier: ^6.16.0
@@ -318,7 +312,7 @@ importers:
         specifier: ^4.7.2
         version: 4.7.2(typescript@5.9.3)(zod@3.25.76)
       web3-types:
-        specifier: 'catalog:'
+        specifier: ^1.10.0
         version: 1.10.0
     devDependencies:
       '@nestjs/axios':
@@ -391,7 +385,7 @@ importers:
   packages/nestjs-web3-etherscan:
     dependencies:
       '@miinded/nestjs-blockchain-core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nestjs-blockchain-core
       axios:
         specifier: ^1.13.5
@@ -400,7 +394,7 @@ importers:
         specifier: ^4.16.0
         version: 4.16.0(typescript@5.9.3)(zod@3.25.76)
       web3-types:
-        specifier: 'catalog:'
+        specifier: ^1.10.0
         version: 1.10.0
     devDependencies:
       '@nestjs/axios':
@@ -476,7 +470,7 @@ importers:
         specifier: ^8.2.0
         version: 8.2.0
       '@miinded/nestjs-blockchain-core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nestjs-blockchain-core
       bip322-js:
         specifier: ^2.0.0

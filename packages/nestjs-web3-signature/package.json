@@ -65,7 +65,7 @@
     "test:coverage": "node ../../config/run-jest.mjs coverage"
   },
   "dependencies": {
-    "@miinded/nestjs-blockchain-core": "workspace:*",
+    "@miinded/nestjs-blockchain-core": "workspace:^",
     "@metamask/eth-sig-util": "^8.2.0",
     "bip322-js": "^2.0.0",
     "siwe": "^3.0.0",
