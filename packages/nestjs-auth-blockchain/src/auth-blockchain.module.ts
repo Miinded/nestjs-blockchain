@@ -22,8 +22,22 @@ export type AuthBlockchainSignature = AbstractProviderManager<ContractServiceOpt
 export type AuthBlockchainConfig = {
   providers?: AuthBlockchainSignature;
   chainIds?: number[];
-  domain: string;
-  secret: string;
+  // Legacy support - domain can be string or array
+  domain?: string | string[];
+  domains?: string[];
+  secret?: string;
+  token?: {
+    secret: string;
+    signOptions?: {
+      expiresIn?: string;
+    };
+  };
+  refreshToken?: {
+    secret: string;
+    signOptions?: {
+      expiresIn?: string;
+    };
+  };
 };
 
 export type AuthBlockchainAsyncConfig = {
@@ -78,7 +92,9 @@ export class AuthBlockchainModule {
           nonceCheckerService: NonceCheckerService,
         ) => {
           const chainIds = config?.chainIds || [];
-          return new MyPassportAuthBlockchainStrategy([config.domain], chainIds, userService, nonceCheckerService);
+          // Support legacy domains/domain and new format
+          const domains = config.domains || (config.domain ? (Array.isArray(config.domain) ? config.domain : [config.domain]) : []);
+          return new MyPassportAuthBlockchainStrategy(domains, chainIds, userService, nonceCheckerService);
         },
         inject: [BLOCKCHAIN_MODULE_OPTIONS, BLOCKCHAIN_USER_SERVICE, NonceCheckerService],
       },
@@ -89,7 +105,9 @@ export class AuthBlockchainModule {
       {
         provide: BlockchainJwtStrategy,
         useFactory: (config: AuthBlockchainConfig) => {
-          return new BlockchainJwtStrategy(config.secret);
+          // Support legacy token.secret and new secret
+          const secret = config.token?.secret || config.secret || '';
+          return new BlockchainJwtStrategy(secret);
         },
         inject: [BLOCKCHAIN_MODULE_OPTIONS],
       },
@@ -125,9 +143,12 @@ export class AuthBlockchainModule {
           global: true,
           imports: [coreModule],
           useFactory: (config: AuthBlockchainConfig) => {
+            // Support legacy token config and new secret
+            const secret = config.token?.secret || config.secret || '';
+            const expiresIn = config.token?.signOptions?.expiresIn || '2d';
             return {
-              secret: config.secret,
-              signOptions: { expiresIn: '2d' },
+              secret,
+              signOptions: { expiresIn },
             } as JwtModuleOptions;
           },
           inject: [BLOCKCHAIN_MODULE_OPTIONS],
