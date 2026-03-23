@@ -1,6 +1,6 @@
 {
   "name": "@miinded/nestjs-web3-etherscan",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Production-ready NestJS module for Etherscan API integration. Supports multiple blockchains with automatic retry and rate limiting.",
   "license": "MIT",
   "author": "Miinded",
