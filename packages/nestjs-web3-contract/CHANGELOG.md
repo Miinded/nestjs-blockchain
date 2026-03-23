@@ -1,5 +1,11 @@
 # @miinded/nestjs-web3-contract
 
+## 1.0.2
+
+### Patch Changes
+
+- f374fe5: fix: export getWeb3 function for external usage
+
 ## 1.0.1
 
 ### Patch Changes
