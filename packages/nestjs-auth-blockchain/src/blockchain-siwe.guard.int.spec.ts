@@ -89,9 +89,9 @@ class MyBlockchainUserService implements IBlockchainAuth {
     AuthBlockchainModule.registerAsync({
       userService: MyBlockchainUserService,
       useFactory: () => ({
-        providers: {},
-        secret: 'I Love JWT',
-        domain: 'localhost',
+        domains: ['localhost'],
+        token: { secret: 'I Love JWT' },
+        refreshToken: { secret: 'I Love Refresh JWT' },
         chainIds: [1],
       }),
     }),

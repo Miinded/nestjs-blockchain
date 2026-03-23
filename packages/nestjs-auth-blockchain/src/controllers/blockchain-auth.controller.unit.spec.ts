@@ -55,6 +55,7 @@ describe('BlockchainAuthController', () => {
       const body = {
         networkId: 1,
         wallet: '0x1234567890abcdef',
+        domain: 'localhost',
         uri: 'http://localhost:3000',
         signatureType: SignatureType.SIMPLE,
       };
@@ -73,6 +74,7 @@ describe('BlockchainAuthController', () => {
       const body = {
         networkId: 1,
         wallet: '0x1234567890abcdef',
+        domain: 'localhost',
         uri: 'http://localhost:3000',
         signatureType: SignatureType.ADVANCED,
       };
@@ -91,6 +93,7 @@ describe('BlockchainAuthController', () => {
       const body = {
         networkId: 1,
         wallet: '0x1234567890abcdef',
+        domain: 'localhost',
         uri: 'http://localhost:3000',
         signatureType: SignatureType.SIWE,
       };
@@ -109,6 +112,7 @@ describe('BlockchainAuthController', () => {
       const body = {
         networkId: 1,
         wallet: '0x1234567890abcdef',
+        domain: 'localhost',
         uri: 'http://localhost:3000',
         signatureType: SignatureType.SIMPLE,
       };

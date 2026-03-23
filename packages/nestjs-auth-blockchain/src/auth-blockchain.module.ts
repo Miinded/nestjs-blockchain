@@ -15,30 +15,29 @@ import { AbstractProviderManager } from '@miinded/nestjs-blockchain-core';
 import { BLOCKCHAIN_MODULE_OPTIONS, BLOCKCHAIN_USER_SERVICE } from './constants';
 import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { BlockchainJwtStrategy } from './strategy/blockchain-jwt.strategy';
+import { BlockchainRefreshTokenStrategy } from './strategy/blockchain-refresh-token.strategy';
 import { NonceCheckerService } from './service/nonce-checker.service';
+import { IBlockchainAuthRefresh } from './interface/IBlockchainAuthRefresh.interface';
 
 export type AuthBlockchainSignature = AbstractProviderManager<ContractServiceOptions>;
+
+export type JwtTransport = 'header' | 'cookie';
+
+export type JwtTokenOptions = JwtModuleOptions & {
+  transport?: JwtTransport;
+  cookieName?: string;
+};
+
+export type JWTConfig = {
+  token: JwtTokenOptions;
+  refreshToken: JwtTokenOptions;
+};
 
 export type AuthBlockchainConfig = {
   providers?: AuthBlockchainSignature;
   chainIds?: number[];
-  // Legacy support - domain can be string or array
-  domain?: string | string[];
-  domains?: string[];
-  secret?: string;
-  token?: {
-    secret: string;
-    signOptions?: {
-      expiresIn?: string;
-    };
-  };
-  refreshToken?: {
-    secret: string;
-    signOptions?: {
-      expiresIn?: string;
-    };
-  };
-};
+  domains: string[];
+} & JWTConfig;
 
 export type AuthBlockchainAsyncConfig = {
   isGlobal?: boolean;
@@ -92,9 +91,7 @@ export class AuthBlockchainModule {
           nonceCheckerService: NonceCheckerService,
         ) => {
           const chainIds = config?.chainIds || [];
-          // Support legacy domains/domain and new format
-          const domains = config.domains || (config.domain ? (Array.isArray(config.domain) ? config.domain : [config.domain]) : []);
-          return new MyPassportAuthBlockchainStrategy(domains, chainIds, userService, nonceCheckerService);
+          return new MyPassportAuthBlockchainStrategy(config.domains, chainIds, userService, nonceCheckerService);
         },
         inject: [BLOCKCHAIN_MODULE_OPTIONS, BLOCKCHAIN_USER_SERVICE, NonceCheckerService],
       },
@@ -105,11 +102,17 @@ export class AuthBlockchainModule {
       {
         provide: BlockchainJwtStrategy,
         useFactory: (config: AuthBlockchainConfig) => {
-          // Support legacy token.secret and new secret
-          const secret = config.token?.secret || config.secret || '';
-          return new BlockchainJwtStrategy(secret);
+          return new BlockchainJwtStrategy(config.token);
         },
         inject: [BLOCKCHAIN_MODULE_OPTIONS],
+      },
+      {
+        provide: BlockchainRefreshTokenStrategy,
+        useFactory: (config: AuthBlockchainConfig, userService: IBlockchainAuth) => {
+          const refreshUserService = userService as IBlockchainAuthRefresh;
+          return new BlockchainRefreshTokenStrategy(config.refreshToken, refreshUserService);
+        },
+        inject: [BLOCKCHAIN_MODULE_OPTIONS, BLOCKCHAIN_USER_SERVICE],
       },
     ];
 
@@ -143,13 +146,7 @@ export class AuthBlockchainModule {
           global: true,
           imports: [coreModule],
           useFactory: (config: AuthBlockchainConfig) => {
-            // Support legacy token config and new secret
-            const secret = config.token?.secret || config.secret || '';
-            const expiresIn = config.token?.signOptions?.expiresIn || '2d';
-            return {
-              secret,
-              signOptions: { expiresIn },
-            } as JwtModuleOptions;
+            return config.token;
           },
           inject: [BLOCKCHAIN_MODULE_OPTIONS],
         }),

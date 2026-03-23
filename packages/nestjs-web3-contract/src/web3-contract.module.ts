@@ -45,7 +45,7 @@ export type Web3ContractConfig = AbstractBlockchainManager<ContractOption>;
 
 export type ContractRegistry = AbstractBlockchainManager<Registry>;
 
-export const getWeb3 = async (blockchainAddress: string) => {
+export const getWeb3 = async (blockchainAddress: string): Promise<Web3> => {
   const url = new URL(blockchainAddress);
   if (url.protocol === 'wss:') {
     return new Web3(new Web3.providers.WebsocketProvider(blockchainAddress));
