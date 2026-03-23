@@ -24,8 +24,13 @@ describe('AuthBlockchainModule', () => {
 
   const mockConfig: AuthBlockchainAsyncConfig = {
     useFactory: () => ({
-      domain: 'localhost',
-      secret: 'test-secret',
+      domains: ['localhost'],
+      token: {
+        secret: 'test-secret',
+      },
+      refreshToken: {
+        secret: 'test-refresh-secret',
+      },
       chainIds: [1],
       providers: {
         DEFAULT: {
@@ -100,8 +105,9 @@ describe('AuthBlockchainModule', () => {
   it('should throw error when signature manager not found', async () => {
     const configWithoutProviders: AuthBlockchainAsyncConfig = {
       useFactory: () => ({
-        domain: 'localhost',
-        secret: 'test-secret',
+        domains: ['localhost'],
+        token: { secret: 'test-secret' },
+        refreshToken: { secret: 'test-refresh-secret' },
         chainIds: [1],
       }),
       userService: MockUserService,
@@ -114,8 +120,9 @@ describe('AuthBlockchainModule', () => {
   it('should handle empty chainIds', async () => {
     const configWithEmptyChainIds: AuthBlockchainAsyncConfig = {
       useFactory: () => ({
-        domain: 'localhost',
-        secret: 'test-secret',
+        domains: ['localhost'],
+        token: { secret: 'test-secret' },
+        refreshToken: { secret: 'test-refresh-secret' },
         chainIds: [],
       }),
       userService: MockUserService,
@@ -128,8 +135,9 @@ describe('AuthBlockchainModule', () => {
   it('should handle undefined chainIds', async () => {
     const configWithoutChainIds: AuthBlockchainAsyncConfig = {
       useFactory: () => ({
-        domain: 'localhost',
-        secret: 'test-secret',
+        domains: ['localhost'],
+        token: { secret: 'test-secret' },
+        refreshToken: { secret: 'test-refresh-secret' },
       }),
       userService: MockUserService,
     };

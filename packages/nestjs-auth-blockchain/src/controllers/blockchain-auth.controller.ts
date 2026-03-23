@@ -1,10 +1,11 @@
-import { Body, Controller, HttpException, HttpStatus, Request, Post, UseGuards, Logger } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Request, Post, UseGuards, Logger, Get } from '@nestjs/common';
 import { IBlockchainAuth } from '../interface/IBlockchainAuth.interface';
 import { InjectBlockchainUser } from '../decorator';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { SignatureType } from '@miinded/nestjs-web3-signature';
 import { formatNonceMessage } from '../utils';
+import { BlockchainRefreshTokenGuard } from '../guards/blockchain-refresh-token.guard';
 
 // Migration pour uniformiser les différentes provider de connexion
 @Controller('auth')
@@ -59,5 +60,11 @@ export class BlockchainAuthController {
       access_token,
       user: req.user,
     };
+  }
+
+  @UseGuards(BlockchainRefreshTokenGuard)
+  @Get('refreshtoken')
+  async refreshToken(@Request() req: { user: { id: string; username?: string; wallet?: string } }) {
+    return req.user;
   }
 }
