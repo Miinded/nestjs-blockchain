@@ -1,5 +1,13 @@
 # @miinded/nestjs-auth-blockchain
 
+## 1.1.1
+
+### Patch Changes
+
+- 8922390: Fix JWT module dependency injection error by removing coreModule pattern
+
+  The JwtModule.registerAsync was unable to resolve BLOCKCHAIN_MODULE_OPTIONS when it was provided through a separate coreModule. This fix moves the provider directly into the main module's providers array, following the same pattern as AuthJwtModule.
+
 ## 1.1.0
 
 ### Minor Changes
