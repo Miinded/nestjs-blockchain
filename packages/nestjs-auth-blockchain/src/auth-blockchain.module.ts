@@ -55,9 +55,6 @@ export type AuthBlockchainSyncConfig = {
 } & AuthBlockchainConfig;
 
 @Module({})
-class AuthBlockchainCoreModule {}
-
-@Module({})
 export class AuthBlockchainModule {
   static register(options: AuthBlockchainSyncConfig): DynamicModule {
     const { isGlobal, userService, ...config } = options;
@@ -69,9 +66,12 @@ export class AuthBlockchainModule {
   }
 
   static registerAsync(options: AuthBlockchainAsyncConfig): DynamicModule {
-    const coreModule = AuthBlockchainModule.createCoreModule(options);
-
     const providers: Provider[] = [
+      {
+        provide: BLOCKCHAIN_MODULE_OPTIONS,
+        useFactory: options.useFactory,
+        inject: options.inject || [],
+      },
       {
         provide: NonceCheckerService,
         useFactory: (signatureRegistry: SignatureRegistry, userService: IBlockchainAuth) => {
@@ -122,11 +122,9 @@ export class AuthBlockchainModule {
       controllers: [BlockchainAuthController],
       imports: [
         ...(options?.imports || []),
-        coreModule,
         PassportModule,
         Web3SignatureModule.registerAsync({
           isGlobal: false,
-          imports: [coreModule],
           useFactory: (config: AuthBlockchainConfig) => {
             const configuration: Web3SignatureConfig = { ...DEFAULT_SIGNATURE_MANAGER };
             if (config.providers) {
@@ -143,8 +141,6 @@ export class AuthBlockchainModule {
           inject: [BLOCKCHAIN_MODULE_OPTIONS],
         }),
         JwtModule.registerAsync({
-          global: true,
-          imports: [coreModule],
           useFactory: (config: AuthBlockchainConfig) => {
             return config.token;
           },
@@ -153,20 +149,6 @@ export class AuthBlockchainModule {
       ],
       providers,
       exports: [...providers],
-    };
-  }
-
-  private static createCoreModule(options: AuthBlockchainAsyncConfig): DynamicModule {
-    return {
-      module: AuthBlockchainCoreModule,
-      providers: [
-        {
-          provide: BLOCKCHAIN_MODULE_OPTIONS,
-          useFactory: options.useFactory,
-          inject: options.inject || [],
-        },
-      ],
-      exports: [BLOCKCHAIN_MODULE_OPTIONS],
     };
   }
 }
