@@ -88,17 +88,12 @@ describe('AuthBlockchainModule', () => {
     expect(dynamicModule.exports).toBeDefined();
   });
 
-  it('should have correct module options provider in core module', async () => {
+  it('should have correct module options provider', async () => {
     const dynamicModule = AuthBlockchainModule.registerAsync(mockConfig);
     type Provider = { provide: unknown; useFactory?: unknown };
-    type DynModule = { providers?: Provider[] };
-    const coreModule = (dynamicModule.imports as DynModule[])?.find(
-      (m) => m.providers?.some((p) => p.provide === BLOCKCHAIN_MODULE_OPTIONS),
-    );
-    expect(coreModule).toBeDefined();
-    const optionsProvider = coreModule!.providers?.find((p) => p.provide === BLOCKCHAIN_MODULE_OPTIONS);
+    const optionsProvider = dynamicModule.providers?.find((p) => (p as Provider).provide === BLOCKCHAIN_MODULE_OPTIONS);
     expect(optionsProvider).toBeDefined();
-    expect(optionsProvider!.useFactory).toBe(mockConfig.useFactory);
+    expect((optionsProvider as Provider).useFactory).toBe(mockConfig.useFactory);
   });
 
   it('should have user service provider', async () => {
