@@ -12,7 +12,7 @@ import {
   ContractServiceOptions,
 } from '@miinded/nestjs-web3-signature';
 import { AbstractProviderManager } from '@miinded/nestjs-blockchain-core';
-import { BLOCKCHAIN_MODULE_OPTIONS, BLOCKCHAIN_USER_SERVICE } from './constants';
+import { BLOCKCHAIN_MODULE_OPTIONS, BLOCKCHAIN_USER_SERVICE, BLOCKCHAIN_JWT_OPTIONS } from './constants';
 import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { BlockchainJwtStrategy } from './strategy/blockchain-jwt.strategy';
 import { BlockchainRefreshTokenStrategy } from './strategy/blockchain-refresh-token.strategy';
@@ -66,7 +66,20 @@ export class AuthBlockchainModule {
   }
 
   static registerAsync(options: AuthBlockchainAsyncConfig): DynamicModule {
+    const optionsProvider: Provider = {
+      provide: BLOCKCHAIN_MODULE_OPTIONS,
+      useFactory: options.useFactory,
+      inject: options.inject || [],
+    };
+
+    const jwtOptionsProvider: Provider = {
+      provide: BLOCKCHAIN_JWT_OPTIONS,
+      useFactory: (config: AuthBlockchainConfig) => config,
+      inject: [BLOCKCHAIN_MODULE_OPTIONS],
+    };
     const providers: Provider[] = [
+      optionsProvider,
+      jwtOptionsProvider,
       {
         provide: BLOCKCHAIN_MODULE_OPTIONS,
         useFactory: options.useFactory,
@@ -141,6 +154,7 @@ export class AuthBlockchainModule {
           inject: [BLOCKCHAIN_MODULE_OPTIONS],
         }),
         JwtModule.registerAsync({
+          extraProviders: [optionsProvider],
           useFactory: (config: AuthBlockchainConfig) => {
             return config.token;
           },
@@ -148,7 +162,7 @@ export class AuthBlockchainModule {
         }),
       ],
       providers,
-      exports: [...providers],
+      exports: [...providers, JwtModule],
     };
   }
 }
