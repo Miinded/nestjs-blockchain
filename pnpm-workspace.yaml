@@ -19,7 +19,7 @@ catalog:
   '@nestjs/axios': ^4.0.1
   '@nestjs/jwt': ^11.0.2
   '@nestjs/passport': ^11.0.5
-  '@swc/core': ^1.13.5
+  '@swc/core': ^1.15.18
   '@swc/jest': ^0.2.39
   '@typescript-eslint/eslint-plugin': ^8.55.0
   '@typescript-eslint/parser': ^8.55.0
