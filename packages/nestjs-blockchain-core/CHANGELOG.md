@@ -1,5 +1,16 @@
 # @miinded/nestjs-blockchain-core
 
+## 2.0.0
+
+### Major Changes
+
+- db91720: Require Node.js >= 24 and refresh dependencies for security fixes.
+
+  - `engines.node` is now `>=24` (Node.js 22 is no longer supported).
+  - `@miinded/nestjs-web3-etherscan`: `axios` raised to `^1.20.0` (fixes several advisories).
+  - `@miinded/nestjs-web3-contract`: `ethers` raised to `^6.17.0`.
+  - Dependencies updated to their latest compatible versions.
+
 ## 1.0.1
 
 ### Patch Changes
