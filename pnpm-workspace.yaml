@@ -22,8 +22,8 @@ catalog:
   '@types/passport-jwt': ^4.0.1
   '@types/passport-strategy': ^0.2.38
   '@types/supertest': ^6.0.3
-  '@typescript-eslint/eslint-plugin': ^8.72.0
-  '@typescript-eslint/parser': ^8.72.0
+  '@typescript-eslint/eslint-plugin': ^8.72.1
+  '@typescript-eslint/parser': ^8.72.1
   axios: ^1.13.5
   eslint: ^9.39.5
   eslint-config-prettier: ^10.1.8
